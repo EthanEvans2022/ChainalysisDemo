@@ -1,0 +1,6 @@
+.pyc 
+.DS_Store
+_pycache__/ 
+db.sqlite3 
+*.key 
+thumbs.db
