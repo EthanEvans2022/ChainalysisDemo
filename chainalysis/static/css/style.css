@@ -1,0 +1,16 @@
+.exchange{
+    text-align: center;
+    border: 1px solid;
+}
+
+.prices{
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+}
+
+.coin_div{
+    display: flex;
+}
+
+

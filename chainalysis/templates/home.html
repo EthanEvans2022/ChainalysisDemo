@@ -1,11 +1,32 @@
 <!DOCTYPE html>                                                                                                                      
+{% load static %}
 <html>
     <head>
         <title>Exchange Prices</title>
+        <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" >
     </head>
     <body>
-
-        <h1>Hello, world!</h1>
-        <p>This is testing the template</p>
+        {%for coin in coins %}
+            <h1>{{ coin.name }}</h1>
+            <div class="coin_div">
+                {%for exchange in coin.exchanges %}
+                <div class="exchange">
+                    <h2>{{ exchange.name }}</h2>
+                    <div class="books">
+                        {% for book in exchange.books %}
+                        <div class="price">
+                            <h2>{{ book.name }}:</h2>
+                            <ul>
+                            {% for offer in book.offers %}
+                                <li>{{ offer }} </li>
+                            {% endfor %}
+                            </ul>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
     </body>
 </html>
