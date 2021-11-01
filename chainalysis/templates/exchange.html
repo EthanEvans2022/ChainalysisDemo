@@ -1,0 +1,24 @@
+{% extends 'home.html' %}
+{% block exchange %}
+    <div class="exchange">
+        <h2>{{ exchange|get_item:"exchange" }}</h2>
+        <div class="prices">
+            <div class="asks">
+                <h2>Asks:</h2>
+                <ul>
+                {% for ask in exchange|get_item:"asks" %}
+                    <li>{{ ask }} </li> 
+                {% endfor %}
+                </ul>
+            </div>
+            <div class="bids">
+                <h2>Bids:</h2>
+                <ul>
+                {% for bid in exchange|get_item:"bids" %}
+                    <li>{{ bid }} </li> 
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
