@@ -17,5 +17,5 @@ def get_coin(coin, exchanges, quote="USD", count=5):
     books = []
     for exchange in exchanges:
         books.append(fetch_books(exchange, coin, quote, count))
-    return {"name": coin, "books": books}
+    return {"name": coin, "exchanges": books}
 

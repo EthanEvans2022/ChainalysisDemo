@@ -18,10 +18,10 @@ def filter_raw_books(raw_books):
     cleaned_books = {}
     cleaned_books["base"] = raw_books["baseSymbol"]
     cleaned_books["quote"] = raw_books["quoteSymbol"]
-    cleaned_books["exchange"] = raw_books["orderBooks"][0]["exchange"]
+    cleaned_books["name"] = raw_books["orderBooks"][0]["exchange"]
     books=[]
-    books.append("Asks", raw_books["orderBooks"][0]["orderBook"]["asks"]
-    books.append("Bids", raw_books["orderBooks"][0]["orderBook"]["bids"]
+    books.append({"name": "Asks", "offers": raw_books["orderBooks"][0]["orderBook"]["asks"]})
+    books.append({"name": "Bids", "offers": raw_books["orderBooks"][0]["orderBook"]["bids"]})
     cleaned_books["books"] = books
     return cleaned_books
 
