@@ -8,53 +8,37 @@
     <body>
         <!--Coin container-->
         {%for coin in coins %}
-            {{ coin }}
-            <h1>{{ coin.name }}</h1>
+            <h2>{{ coin.name }}</h2>
             <div class="coin_div">
-                <!--Exchanges generator-->
-                {%for exchange in coin.exchanges %}
-                <div class="exchange">
-                    <h2>{{ exchange.name }}</h2>
-                    <div class="books">
-                        <!-- load books -->
-                        {% for book in exchange.books %}
-                        <div class="price">
-                            <h2>{{ book.name }}:</h2>
-                            {% if book.name == "Asks" %}
-                            <table class="asks_table">
-                            {% else %}
-                            <table class="bids_table">
-                            {% endif %} 
+                <!-- Create asks + bids columns -->
+                {% for book in coin.books %} 
+                <div class="{{book.name}}_div">
+                    <h3>{{book.name|camel}}:</h3>
+                    <!-- Create all exchanges for the given book -->
+                    <div class="exchanges_container">
+                    {% for exchange in book.exchanges %}
+                        <div class="exchange">
+                            <h4>{{ exchange.name }}</h4>
+                            <table>
                                 <tr>
                                     <th>Price ($)</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
                                 </tr>
-                            {% for offer in book.offers %}
+                                {% for offer in exchange.offers %}
+                                <!-- Populate the exchange's table -->
                                 <tr>
                                     <td>{{ offer.price }}</td>
                                     <td>{{ offer.quantity }}</td>
                                     <td>{{ offer.total }}</td>
                                 </tr>
-                            {% endfor %}
+                                {% endfor %} 
                             </table>
                         </div>
-                        {% endfor %}
+                    {% endfor %} 
                     </div>
                 </div>
                 {% endfor %}
-                <div class="recommendation">
-                    {% if coin.recommendation %}
-                        <div class="best_ask">
-                            <p>Best buy: <b>{{ coin.recommendation.best_ask.exchange }}</b> at <b>${{ coin.recommendation.best_ask.offer.price }}</b></p>
-                        </div>
-                        <div class="best_bid">
-                            <p>Best sell: <b>{{ coin.recommendation.best_bid.exchange }}</b> at <b>${{ coin.recommendation.best_bid.offer.price }}</b></p>
-                        </div>
-                    {% else %}
-                        This is where the recommendation will go.
-                    {% endif %}
-                </div>
             </div>
         {% endfor %}
     </body>

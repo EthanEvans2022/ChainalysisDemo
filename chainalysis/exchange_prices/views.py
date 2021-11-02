@@ -1,7 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from tools.price_fetcher import fetch_books, calculate_recommendations
-
+from django.template.defaulttags import register
+@register.filter
+def camel(string):
+    return string
+    #IMPLEMENT
 # Create your views here.
 def home(request):
     context_info = {}
@@ -17,6 +21,8 @@ def get_coin(coin, exchanges, quote="USD", count=5):
     exchange_books = []
     asks, bids = {}, {}
     asks["exchanges"], bids["exchanges"] = [], []
+    asks["name"] = "asks"
+    bids["name"] = "bids"
     for exchange in exchanges:
         #exchange_books.append(fetch_books(exchange, coin, quote, count))
         exc_asks, exc_bids = fetch_books(exchange, coin, quote, count)
@@ -26,5 +32,6 @@ def get_coin(coin, exchanges, quote="USD", count=5):
     bids["recommendation"] = calculate_recommendations(bids["exchanges"], minimize=False) #change to be added to asks + bids dicts
 
     #return {"name": coin, "exchanges": exchange_books, "recommendation": rec}
-    return {"name": coin, "asks": asks, "bids": bids}
+    return {"name": coin, "books": (asks, bids)}
+
 
