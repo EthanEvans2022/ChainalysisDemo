@@ -13,7 +13,7 @@ def get_item(dictionary, key):
 def formatted_offers(offer):
     price = float(offer["price"])
     quantity = float(offer["quantity"])
-    return {"price": offer["price"], "quantity": offer["quantity"], "total": price * quantity}
+    return {"price": offer["price"], "quantity": offer["quantity"], "total": round(price * quantity, 2)}
 
 def filter_raw_books(raw_books):
     cleaned_books = {}
