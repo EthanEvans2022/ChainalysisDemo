@@ -6,13 +6,16 @@
         <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" >
     </head>
     <body>
+        <!--Coin container-->
         {%for coin in coins %}
             <h1>{{ coin.name }}</h1>
             <div class="coin_div">
+                <!--Exchanges generator-->
                 {%for exchange in coin.exchanges %}
                 <div class="exchange">
                     <h2>{{ exchange.name }}</h2>
                     <div class="books">
+                        <!-- load books -->
                         {% for book in exchange.books %}
                         <div class="price">
                             <h2>{{ book.name }}:</h2>
@@ -26,6 +29,17 @@
                     </div>
                 </div>
                 {% endfor %}
+                <div class="recommendation">
+                    {% if coin.recommendation %}
+                        <div class="best_ask">
+                        </div>
+                        <div class="best_bid">
+                        </div>
+                        {{ coin.recommendation }}
+                    {% else %}
+                        This is where the recommendation will go.
+                    {% endif %}
+                </div>
             </div>
         {% endfor %}
     </body>

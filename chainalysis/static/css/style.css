@@ -10,6 +10,13 @@
 }
 
 .coin_div{
+    display: grid;
+    justify-content: space-evenly;
+    grid-template-columns: 45% 45%;
+    border: 1px solid black;
+}
+
+.books{
     display: flex;
 }
 

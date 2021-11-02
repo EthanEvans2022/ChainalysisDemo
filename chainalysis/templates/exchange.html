@@ -1,24 +1,25 @@
 {% extends 'home.html' %}
-{% block exchange %}
-    <div class="exchange">
-        <h2>{{ exchange|get_item:"exchange" }}</h2>
-        <div class="prices">
-            <div class="asks">
-                <h2>Asks:</h2>
-                <ul>
-                {% for ask in exchange|get_item:"asks" %}
-                    <li>{{ ask }} </li> 
-                {% endfor %}
-                </ul>
+{% block exchanges %}
+    {%for coin in coins %}
+        <h1>{{ coin.name }}</h1>
+        <div class="coin_div">
+            {%for exchange in coin.exchanges %}
+            <div class="exchange">
+                <h2>{{ exchange.name }}</h2>
+                <div class="books">
+                    {% for book in exchange.books %}
+                    <div class="price">
+                        <h2>{{ book.name }}:</h2>
+                        <ul>
+                        {% for offer in book.offers %}
+                            <li>{{ offer }} </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="bids">
-                <h2>Bids:</h2>
-                <ul>
-                {% for bid in exchange|get_item:"bids" %}
-                    <li>{{ bid }} </li> 
-                {% endfor %}
-                </ul>
-            </div>
+            {% endfor %}
         </div>
-    </div>
+    {% endfor %}
 {% endblock %}
