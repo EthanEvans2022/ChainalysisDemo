@@ -32,10 +32,11 @@
                 <div class="recommendation">
                     {% if coin.recommendation %}
                         <div class="best_ask">
+                            <p>Best buy: <b>{{ coin.recommendation.best_ask.exchange }}</b> at <b>${{ coin.recommendation.best_ask.offer.price }}</b></p>
                         </div>
                         <div class="best_bid">
+                            <p>Best sell: <b>{{ coin.recommendation.best_bid.exchange }}</b> at <b>${{ coin.recommendation.best_bid.offer.price }}</b></p>
                         </div>
-                        {{ coin.recommendation }}
                     {% else %}
                         This is where the recommendation will go.
                     {% endif %}
