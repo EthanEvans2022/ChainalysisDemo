@@ -10,14 +10,19 @@ from secrets.auth import get_client
 def get_item(dictionary, key):
     return dictionary.get(key)
 
+def formatted_offers(offer):
+    price = float(offer["price"])
+    quantity = float(offer["quantity"])
+    return {"price": offer["price"], "quantity": offer["quantity"], "total": price * quantity}
+
 def filter_raw_books(raw_books):
     cleaned_books = {}
     cleaned_books["base"] = raw_books["baseSymbol"]
     cleaned_books["quote"] = raw_books["quoteSymbol"]
     cleaned_books["name"] = raw_books["orderBooks"][0]["exchange"]
     books=[]
-    books.append({"name": "Asks", "offers": raw_books["orderBooks"][0]["orderBook"]["asks"]})
-    books.append({"name": "Bids", "offers": raw_books["orderBooks"][0]["orderBook"]["bids"]})
+    books.append({"name": "Asks", "offers": list(map(formatted_offers, raw_books["orderBooks"][0]["orderBook"]["asks"]))})
+    books.append({"name": "Bids", "offers": list(map(formatted_offers, raw_books["orderBooks"][0]["orderBook"]["bids"]))})
     cleaned_books["books"] = books
     return cleaned_books
 

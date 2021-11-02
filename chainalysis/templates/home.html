@@ -19,11 +19,24 @@
                         {% for book in exchange.books %}
                         <div class="price">
                             <h2>{{ book.name }}:</h2>
-                            <ul>
+                            {% if book.name == "asks" %}
+                            <table class="asks_table">
+                            {% else %}
+                            <table class="bids_table">
+                            {% endif %} 
+                                <tr>
+                                    <th>Price ($)</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                </tr>
                             {% for offer in book.offers %}
-                                <li>{{ offer }} </li>
+                                <tr>
+                                    <td>{{ offer.price }}</td>
+                                    <td>{{ offer.quantity }}</td>
+                                    <td>{{ offer.total }}</td>
+                                </tr>
                             {% endfor %}
-                            </ul>
+                            </table>
                         </div>
                         {% endfor %}
                     </div>
