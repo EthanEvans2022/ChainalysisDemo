@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-import shrimpy
+import shrimpy #TODO: see if i can remove this now (probably not)
 import json
 import math
 from django.template.defaulttags import register
+from secrets.auth import get_client
+
+#TODO: remove this filter
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
-public_key="ea62910b320683b516c1b5992d73e3de985df3c36086c2349c29d55c392d3a6b"
-#TO-DO: GET KEY HERE WHILE ENCRYPTED if have time
-secret_key="DUMMY123"
-client = shrimpy.ShrimpyApiClient(public_key, secret_key)
 
 def filter_raw_books(raw_books):
     cleaned_books = {}
@@ -24,6 +23,7 @@ def filter_raw_books(raw_books):
 
 def fetch_books(exchange, baseSymbol=None, quoteSymbol=None, limit=5):
     try:
+        client = get_client()
         orderbooks =  client.get_orderbooks(exchange, baseSymbol, quoteSymbol, limit)[0]#returns list of dicts
     except Exception as err:
         print(err)
