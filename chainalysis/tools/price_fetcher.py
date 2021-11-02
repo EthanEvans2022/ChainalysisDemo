@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import shrimpy #TODO: see if i can remove this now (probably not)
 import json
 import math
@@ -16,6 +15,7 @@ def formatted_offers(offer):
     return {"price": offer["price"], "quantity": offer["quantity"], "total": round(price * quantity, 2)}
 
 def filter_raw_books(raw_books):
+    '''
     cleaned_books = {}
     cleaned_books["base"] = raw_books["baseSymbol"]
     cleaned_books["quote"] = raw_books["quoteSymbol"]
@@ -24,7 +24,12 @@ def filter_raw_books(raw_books):
     books.append({"name": "Asks", "offers": list(map(formatted_offers, raw_books["orderBooks"][0]["orderBook"]["asks"]))})
     books.append({"name": "Bids", "offers": list(map(formatted_offers, raw_books["orderBooks"][0]["orderBook"]["bids"]))})
     cleaned_books["books"] = books
-    return cleaned_books
+    '''
+    exchange = raw_books["orderBooks"][0]["exchange"]
+    asks = list(map(formatted_offers, raw_books["orderBooks"][0]["orderBook"]["asks"]))
+    bids = list(map(formatted_offers, raw_books["orderBooks"][0]["orderBook"]["bids"]))
+
+    return {"name": exchange, "offers": asks}, {"name": exchange, "offers": bids}
 
 def fetch_books(exchange, baseSymbol=None, quoteSymbol=None, limit=5):
     try:
@@ -34,7 +39,7 @@ def fetch_books(exchange, baseSymbol=None, quoteSymbol=None, limit=5):
         print(err)
     return filter_raw_books(orderbooks)
 
-def calculate_recommendations(exchanges):
+def calculate_recommendations(exchanges, minimize):
     '''
     have list of exchanges
         name
@@ -47,27 +52,26 @@ def calculate_recommendations(exchanges):
     track best buy/sell price at each exchange
     loop through all exchanges and get the best
     '''
-    best_ask, best_bid = recur_recommendation(exchanges)
-    return {"best_ask": best_ask, "best_bid": best_bid}
+    return  recur_recommendation(exchanges, minimize)
 
-def recur_recommendation(exchanges):
-    best_ask = (math.inf, "ERROR")
-    best_bid = (-math.inf, "ERROR")
+def recur_recommendation(exchanges, minimize):
     if len(exchanges) == 1:
         name = exchanges[0]["name"]
-        ask = exchanges[0]["books"][0]["offers"][0]
-        bid = exchanges[0]["books"][1]["offers"][0]
-        return {"offer": ask, "exchange": name}, {"offer": bid, "exchange": name}
+        offer = exchanges[0]["offers"][0]
+        return {"offer": offer, "exchange": name}
 
     midpoint = int(len(exchanges)/2)
     left = exchanges[:midpoint]
     right = exchanges[midpoint:]
-    best_ask_left, best_bid_left = recur_recommendation(left)
-    best_ask_right, best_bid_right = recur_recommendation(right)
+    best_left = recur_recommendation(left, minimize)
+    best_right = recur_recommendation(right, minimize)
 
-    best_ask = best_ask_left if best_ask_left["offer"]["price"] == min(best_ask_left["offer"]["price"], best_ask_right["offer"]["price"]) else best_ask_right
-    best_bid = best_bid_left if best_bid_left["offer"]["price"] == max(best_bid_left["offer"]["price"], best_bid_right["offer"]["price"]) else best_bid_right
-    return  best_ask, best_bid
+    if minimize:
+        best_offer = best_left if best_left["offer"]["price"] == min(best_left["offer"]["price"], best_right["offer"]["price"]) else best_right
+    else:
+        best_offer = best_left if best_left["offer"]["price"] == max(best_left["offer"]["price"], best_right["offer"]["price"]) else best_right
+
+    return  best_offer
 
 
 def print_exchanges():

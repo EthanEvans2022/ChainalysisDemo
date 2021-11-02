@@ -7,17 +7,24 @@ def home(request):
     context_info = {}
     coins = []
     exchanges = ("coinbasepro", "gemini")
-    coins.append(get_coin("BTC", exchanges, count=3))
-    coins.append(get_coin("ETH", exchanges, count=3))
+    coins.append(get_coin("BTC", exchanges, count=1))
+    coins.append(get_coin("ETH", exchanges, count=1))
     context_info["coins"] = coins
     return render(request,'exchange.html', context=context_info)
 
 #Helper functions (NOT VIEWS)
 def get_coin(coin, exchanges, quote="USD", count=5):
     exchange_books = []
+    asks, bids = {}, {}
+    asks["exchanges"], bids["exchanges"] = [], []
     for exchange in exchanges:
-        exchange_books.append(fetch_books(exchange, coin, quote, count))
-    rec = calculate_recommendations(exchange_books)
+        #exchange_books.append(fetch_books(exchange, coin, quote, count))
+        exc_asks, exc_bids = fetch_books(exchange, coin, quote, count)
+        asks["exchanges"].append(exc_asks)
+        bids["exchanges"].append(exc_bids)
+    asks["recommendation"] = calculate_recommendations(asks["exchanges"], minimize=True)
+    bids["recommendation"] = calculate_recommendations(bids["exchanges"], minimize=False) #change to be added to asks + bids dicts
 
-    return {"name": coin, "exchanges": exchange_books, "recommendation": rec}
+    #return {"name": coin, "exchanges": exchange_books, "recommendation": rec}
+    return {"name": coin, "asks": asks, "bids": bids}
 
