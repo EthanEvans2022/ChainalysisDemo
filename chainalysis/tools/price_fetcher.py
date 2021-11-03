@@ -1,13 +1,9 @@
-import shrimpy #TODO: see if i can remove this now (probably not)
+import shrimpy
 import json
 import math
 from django.template.defaulttags import register
 from secrets.auth import get_client
 
-#TODO: remove this filter
-@register.filter
-def get_item(dictionary, key):
-    return dictionary.get(key)
 
 def formatted_offers(offer):
     price = float(offer["price"])
@@ -15,20 +11,9 @@ def formatted_offers(offer):
     return {"price": offer["price"], "quantity": offer["quantity"], "total": round(price * quantity, 2)}
 
 def filter_raw_books(raw_books):
-    '''
-    cleaned_books = {}
-    cleaned_books["base"] = raw_books["baseSymbol"]
-    cleaned_books["quote"] = raw_books["quoteSymbol"]
-    cleaned_books["name"] = raw_books["orderBooks"][0]["exchange"]
-    books=[]
-    books.append({"name": "Asks", "offers": list(map(formatted_offers, raw_books["orderBooks"][0]["orderBook"]["asks"]))})
-    books.append({"name": "Bids", "offers": list(map(formatted_offers, raw_books["orderBooks"][0]["orderBook"]["bids"]))})
-    cleaned_books["books"] = books
-    '''
     exchange = raw_books["orderBooks"][0]["exchange"]
     asks = list(map(formatted_offers, raw_books["orderBooks"][0]["orderBook"]["asks"]))
     bids = list(map(formatted_offers, raw_books["orderBooks"][0]["orderBook"]["bids"]))
-
     return {"name": exchange, "offers": asks}, {"name": exchange, "offers": bids}
 
 def fetch_books(exchange, baseSymbol=None, quoteSymbol=None, limit=5):
@@ -40,18 +25,6 @@ def fetch_books(exchange, baseSymbol=None, quoteSymbol=None, limit=5):
     return filter_raw_books(orderbooks)
 
 def calculate_recommendations(exchanges, minimize):
-    '''
-    have list of exchanges
-        name
-        books[]
-            name
-            offers[]
-                price: str
-                quantity: str
-
-    track best buy/sell price at each exchange
-    loop through all exchanges and get the best
-    '''
     return  recur_recommendation(exchanges, minimize)
 
 def recur_recommendation(exchanges, minimize):
@@ -73,14 +46,17 @@ def recur_recommendation(exchanges, minimize):
 
     return  best_offer
 
+def get_coin(coin, exchanges, quote="USD", count=5):
+    exchange_books = []
+    asks, bids = {}, {}
+    asks["exchanges"], bids["exchanges"] = [], []
+    asks["name"] = "asks"
+    bids["name"] = "bids"
+    for exchange in exchanges:
+        exc_asks, exc_bids = fetch_books(exchange, coin, quote, count)
+        asks["exchanges"].append(exc_asks)
+        bids["exchanges"].append(exc_bids)
+    asks["recommendation"] = calculate_recommendations(asks["exchanges"], minimize=True)
+    bids["recommendation"] = calculate_recommendations(bids["exchanges"], minimize=False) #change to be added to asks + bids dicts
 
-def print_exchanges():
-    supported_exchanges = client.get_supported_exchanges()
-    for exchange in supported_exchanges:
-        print(exchange["exchange"])
-
-def print_book(book):
-    print(*book, sep="\n")
-
-def print_tickers(exchange):
-    print(client.get_ticker(exchange))
+    return {"name": coin, "books": (asks, bids)}
