@@ -7,12 +7,12 @@
 ---
 3. If you have to scale your solution to 100 users/second traffic what changes would you make, if any?
 
-  - I think the efficiency of building the html page out of the template is pretty terrible, mostly because of time constraints. I used four for loops, meaning that to build a single template takes time proportional to the size of:
+  - I think the efficiency of building the html page out of the template could be improved, mostly because of time constraints. I used four for loops, meaning that to build a single template takes time proportional to:
     ```
     (Number of coins being queried) x (Number of exchanges being checked) x (Number of offers being queried) x 2 
     ```
   - The efficiency of my recommendation algorithm should be optimal, seeing I implemented merge sort and that runs in time nlogn. However, the four for loops in the template would definitely be my first place of optimization. 
-  - I would also take more time to ensure the security of the site was solid. Right now I encrypt the API’s secret key but also leave the decryption key for that in the Github repository, which isn’t secure but 
+  - I would also take more time to ensure the security of the site was solid. Right now I encrypt the API’s secret key but also leave the decryption key for that in the Github repository, which isn’t secure and would lead to issues in a real deployment.
 ---
 4. What are some other enhancements you would have made, if you had more time to do this implementation
-  - As I mentioned before, had I designed with AJAX in mind I could have implemented some cool features. AJAX would allow for the exchange page to be loaded quicker and have the data eventually popular rather than waiting for the entire page to generate. AJAX would also allow me to implement an auto-refresh functionality where the numbers and recommendations would refresh every 10 seconds or so. 
+  - As I mentioned before, had I designed with AJAX in mind I could have implemented some cool features. AJAX would allow for the exchange page to be loaded quicker and have the data eventually populate with a placeholder buffering gif rather than waiting for the entire page to generate. AJAX would also allow me to implement an auto-refresh functionality where the numbers and recommendations would refresh every 10 seconds or so. 
