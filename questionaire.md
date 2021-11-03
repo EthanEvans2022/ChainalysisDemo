@@ -1,3 +1,4 @@
+# Questionaire
 1. Are there any sub-optimal choices( or short cuts taken due to limited time ) in your implementation?
   - I wish I had not coupled the data information so closely with the structure of the page when designing the main template used for the site. Designing with more of an input-oriented mentality would have allowed me to more easily implement AJAX functionality, which in turn would have led to some cool additional features.
 ---
