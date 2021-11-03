@@ -4,15 +4,15 @@ from tools.price_fetcher import fetch_books, calculate_recommendations
 from django.template.defaulttags import register
 @register.filter
 def camel(string):
-    return string
+    return string[0].capitalize() + string[1:]
     #IMPLEMENT
 # Create your views here.
 def home(request):
     context_info = {}
     coins = []
     exchanges = ("coinbasepro", "gemini")
-    coins.append(get_coin("BTC", exchanges, count=1))
-    coins.append(get_coin("ETH", exchanges, count=1))
+    coins.append(get_coin("BTC", exchanges, count=5))
+    coins.append(get_coin("ETH", exchanges, count=5))
     context_info["coins"] = coins
     return render(request,'exchange.html', context=context_info)
 

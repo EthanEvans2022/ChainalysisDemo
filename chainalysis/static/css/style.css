@@ -1,25 +1,67 @@
-.exchange{
-    text-align: center;
-    border: 1px solid;
+/*color palette:
+ * black: 07070A
+ * dark grey: 24272B
+ * light grey: 4a525a
+ * blue: 004ba8
+ * white: #f5f0f6
+ * red: c20114
+ * green: 698F3F
+ *
+ */
+body{
+    font-family: sans-serif;
+    background: #4a525a;
+    color: #f5f0f6;
 }
-
-.prices{
-    display: flex;
-    justify-content: center;
-    align-items: baseline;
-}
-
 .coin_div{
     display: grid;
     justify-content: space-evenly;
     grid-template-columns: 45% 45%;
     border: 1px solid black;
+    background: #24272B;
+    border: 1px solid #f5f0f6;
+    border-radius: 5px;
 }
+.price_div{
+    text-align: center;
+}
+.price_div.asks{
 
-.books{
+}
+.price_div.bids{
+
+}
+.exchanges_container{
     display: flex;
     justify-content: center;
-    padding: 0 5px;
+    padding: 1px 1px;
 }
+.exchange{
+    border: 1px solid;
+    margin: 0 5px;
+    padding: 5px;
+}
+table{
+    border: 1px solid #4a525a;
+    border-collapse: collapse;
+}
+
+th{
+    background: #004ba8;
+}
+
+th, td{
+    border: 1px solid #4a525a;
+    padding: 5px;
+}
+
+@media only screen and (max-width: 1215px) {
+    .coin_div{
+        grid-template-rows: 50% 50%;
+        grid-template-columns: 100%;
+    }
+}
+
+
 
 
